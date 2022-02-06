@@ -4,7 +4,7 @@ try:
     from Cython.Build import cythonize
     from Cython.Distutils import build_ext
 except Exception:
-    print('Cython should installed.')
+    print('Cython should be installed.')
 import numpy
 
 with open("readme.md", "r") as fh:
