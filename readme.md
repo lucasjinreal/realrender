@@ -4,6 +4,19 @@ RealRender, aks RR, is a new library for 3D rendering visualization. Previously 
 
 So I decided pave my own way. RealRender is a 3D render lib that focus on **Speed**, however, there still need more test on various platforms and hardware, currently, RealRender used a new render lib that runs **fastest on my mac**. Other platform still need to test.
 
+## Install
+
+You can using:
+
+```
+pip install realrender
+```
+
+Or install from source:
+
+```
+python setup.py build develop
+```
 
 ## Result
 
