@@ -1,0 +1,5 @@
+*.obj
+*.egg-info/
+build/
+realrender.egg-info/
+
