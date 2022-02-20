@@ -58,7 +58,8 @@ predefined config to render human mesh
 
 cfg2 = {
     'intensity_ambient': 0.3,
-    'color_ambient': (1, 1, 1),
+    # 'color_ambient': (0.56, 0.37, 0.96), # pink
+    'color_ambient': (0.96, 0.37, 0.56), # purple
     'intensity_directional': 0.6,
     'color_directional': (1, 1, 1),
     'intensity_specular': 0.1,
@@ -93,5 +94,4 @@ def render_human_mesh(img, ver_lst, tri, alpha=0.6, show_flag=False, wfp=None, w
     if wfp is not None:
         cv2.imwrite(wfp, res)
         print(f'Save visualization result to {wfp}')
-
     return res
