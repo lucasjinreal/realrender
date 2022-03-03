@@ -3,7 +3,7 @@
 import numpy as np
 from .Sim3DR import get_normal, rasterize
 
-_norm = lambda arr: arr / np.sqrt(np.sum(arr ** 2, axis=1))[:, None]
+_norm = lambda arr: arr / np.sqrt(np.sum(arr**2, axis=1))[:, None]
 
 
 def norm_vertices(vertices):
@@ -22,26 +22,31 @@ def convert_type(obj):
 
 class RenderPipeline(object):
     def __init__(self, **kwargs):
-        self.intensity_ambient = convert_type(kwargs.get('intensity_ambient', 0.3))
-        self.intensity_directional = convert_type(kwargs.get('intensity_directional', 0.6))
-        self.intensity_specular = convert_type(kwargs.get('intensity_specular', 0.1))
-        self.specular_exp = kwargs.get('specular_exp', 5)
-        self.color_ambient = convert_type(kwargs.get('color_ambient', (1, 1, 1)))
-        self.color_directional = convert_type(kwargs.get('color_directional', (1, 1, 1)))
-        self.light_pos = convert_type(kwargs.get('light_pos', (0, 0, 5)))
-        self.view_pos = convert_type(kwargs.get('view_pos', (0, 0, 5)))
+        self.intensity_ambient = convert_type(kwargs.get("intensity_ambient", 0.3))
+        self.intensity_directional = convert_type(
+            kwargs.get("intensity_directional", 0.6)
+        )
+        self.intensity_specular = convert_type(kwargs.get("intensity_specular", 0.1))
+        self.specular_exp = kwargs.get("specular_exp", 5)
+        self.color_directional = convert_type(
+            kwargs.get("color_directional", (1, 1, 1))
+        )
+        self.light_pos = convert_type(kwargs.get("light_pos", (0, 0, 5)))
+        self.view_pos = convert_type(kwargs.get("view_pos", (0, 0, 5)))
 
     def update_light_pos(self, light_pos):
         self.light_pos = convert_type(light_pos)
 
-    def __call__(self, vertices, triangles, bg, texture=None):
+    def render(
+        self, vertices, triangles, bg, color=np.array([0.66, 0.5, 1.0]), texture=None
+    ):
         normal = get_normal(vertices, triangles)
 
         # 2. lighting
         light = np.zeros_like(vertices, dtype=np.float32)
         # ambient component
         if self.intensity_ambient > 0:
-            light += self.intensity_ambient * self.color_ambient
+            light += self.intensity_ambient * np.array(color)
 
         vertices_n = norm_vertices(vertices.copy())
         if self.intensity_directional > 0:
@@ -50,7 +55,9 @@ class RenderPipeline(object):
             cos = np.sum(normal * direction, axis=1)[:, None]
             # cos = np.clip(cos, 0, 1)
             #  todo: check below
-            light += self.intensity_directional * (self.color_directional * np.clip(cos, 0, 1))
+            light += self.intensity_directional * (
+                self.color_directional * np.clip(cos, 0, 1)
+            )
 
             # specular component
             if self.intensity_specular > 0:
@@ -58,7 +65,11 @@ class RenderPipeline(object):
                 reflection = 2 * cos * normal - direction
                 spe = np.sum((v2v * reflection) ** self.specular_exp, axis=1)[:, None]
                 spe = np.where(cos != 0, np.clip(spe, 0, 1), np.zeros_like(spe))
-                light += self.intensity_specular * self.color_directional * np.clip(spe, 0, 1)
+                light += (
+                    self.intensity_specular
+                    * self.color_directional
+                    * np.clip(spe, 0, 1)
+                )
         light = np.clip(light, 0, 1)
 
         # 2. rasterization, [0, 1]
@@ -75,5 +86,5 @@ def main():
     pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
