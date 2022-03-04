@@ -15,7 +15,7 @@ REQUIREMENTS = ["numpy", "opencv-python", "alfred-py", "cython"]
 
 setuptools.setup(
     name='realrender',
-    version='0.0.1',
+    version='0.0.3',
     author="Lucas Jin",
     author_email="11@qq.com",
     install_requires=REQUIREMENTS,
@@ -23,14 +23,19 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/jinfagang/realrender",
-    packages=setuptools.find_packages(),
+    packages=[
+        'realrender',
+        'realrender.sim3drender',
+        'realrender.sim3drender.lib',
+    ],
     # cmdclass={'build_ext': build_ext},
-    ext_modules=cythonize([Extension("realrender.Sim3DR.Sim3DR_Cython",
-                           sources=["realrender/Sim3DR/lib/rasterize.pyx",
-                                    "realrender/Sim3DR/lib/rasterize_kernel.cpp"],
+    ext_modules=cythonize([Extension("realrender.sim3drender.Sim3DR_Cython",
+                           sources=["realrender/sim3drender/lib/rasterize.pyx",
+                                    "realrender/sim3drender/lib/rasterize_kernel.cpp"],
                            language='c++',
                            include_dirs=[numpy.get_include()],
                            extra_compile_args=["-std=c++11"])]),
+    include_package_data=True,
     classifiers=[
         "Programming Language :: Python :: 2",
          "Programming Language :: Python :: 3",

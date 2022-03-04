@@ -2,7 +2,7 @@ import sys
 import cv2
 import numpy as np
 
-from .Sim3DR import RenderPipeline
+from .sim3drender import RenderPipeline
 
 
 def _to_ctype(arr):
