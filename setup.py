@@ -10,12 +10,12 @@ import numpy
 with open("readme.md", "r") as fh:
     long_description = fh.read()
 
-REQUIREMENTS = ["numpy", "opencv-python", "alfred-py", "cython"]
+REQUIREMENTS = ["numpy", "opencv-python", "cython"]
 
 
 setuptools.setup(
     name='realrender',
-    version='0.0.3',
+    version='0.0.5',
     author="Lucas Jin",
     author_email="11@qq.com",
     install_requires=REQUIREMENTS,
